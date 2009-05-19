@@ -1,0 +1,14 @@
+{
+  "templates" : [
+    {
+     "id" : "welcome",
+     "template" : "/WEB-INF/page-templates/base-page.html",
+     "extends" : "blueprints-css",
+     "properties" : {
+           "title" : {"type" : "string", "value" : "Proto Rabbit jMaki Test"},
+           "body" : { "type" : "include", "value" : "/main.html" }
+       }
+    }
+
+  ]
+}

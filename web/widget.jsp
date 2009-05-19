@@ -1,9 +1,9 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-    
-<%@page import="org.jmaki.model.impl.*"%><html>
-<%@page import="org.jmaki.model.*"%><html>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@page import="org.jmaki.model.impl.*"%>
+<%@page import="org.jmaki.model.*"%>
+
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -47,13 +47,13 @@ IWidget widget = new WidgetImpl("jmaki.menu2", "id123");
 <h3> Scripts </h3>
 <%
 if (wcfg.getScripts() != null) {
-	out.println("<ul>");
-	for ( ResourceURI ri : wcfg.getScripts()) {
-		out.print("<li>" + ri.getFullURI() + "</li>" );
-	}
+    out.println("<ul>");
+    for ( ResourceURI ri : wcfg.getScripts()) {
+        out.print("<li>" + ri.getFullURI() + "</li>" );
+    }
     out.println("</ul>");
 } else {
-	   out.println("N/A");
+   out.println("N/A");
 }
 %>
 
@@ -66,7 +66,7 @@ if (wcfg.getStyles() != null) {
     }
     out.println("</ul>");
 } else {
-       out.println("N/A");
+    out.println("N/A");
 }
 %>
 

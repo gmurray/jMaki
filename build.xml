@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="jMaki" default="compile" basedir=".">
+
+  <property file="build.properties"/>
+  <property file="${user.home}/build.properties"/>
+
+  <property name="src.web" value="${basedir}/web"/>
+  <property name="dist.dir" value="${basedir}/dist"/>
+  <property name="build.dir" value="${basedir}/build"/>
+  <property name="build.classes" value="${build.dir}/classes"/>
+  <property name="war.build.dir" value="${build.dir}/war"/>  
+
+  <target name="compile" depends="clean">
+      <mkdir dir="${build.dir}/classes" />
+      <javac srcdir="src"
+          destdir="${build.classes}"
+          classpath="${build.classes}:lib/servlet-api-2.4.jar:lib/org.json-0.0.2.jar:lib/protorabbit-0.6.0.jar"
+          source="1.5"
+          debug="on">
+      </javac>
+
+  </target>
+
+  <target name="dist" depends="compile">
+    <mkdir dir="${dist.dir}"/>
+    <mkdir dir="${build.classes}/org/protorabbit/resources"/>
+    <copy todir="${build.classes}/org">
+      <fileset dir="src/org" />
+    </copy>
+    <jar destfile="${dist.dir}/jmaki-${version}.jar"
+         basedir="${build.classes}"
+    />
+  </target>
+
+  <target name="deploy" depends="deploy-check"/>
+
+  <target name="deploy-check" depends="compile">
+       <ant  inheritAll="false" target="deploy-java" antfile="../build.xml">
+        <property name="target.war" value="${dist.dir}/${ant.project.name}.war" />
+      </ant>
+  </target>
+
+ <target name="clean">
+   <delete dir="build" />
+  </target>
+
+
+    
+</project>

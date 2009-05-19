@@ -39,14 +39,6 @@
                      "style" : "../resources/styles/themes/ocean/theme.css"
                    }
                ],
-               "libs" : [
-                 { "url" : "foo.js"},
-                 "google.js"
-               ],
-                "styles" : [
-                 { "url" : "foo.css"},
-                 "../resources/styles/themes/ocean/theme.css"
-               ],
                "resources" : [
                    "../resources/styles"
                ]
