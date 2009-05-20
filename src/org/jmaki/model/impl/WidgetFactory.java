@@ -48,6 +48,7 @@ public class WidgetFactory {
             wcfg = new WidgetConfig();
         }
         String baseDir = "/" + ctx.getGlobalConfig().getAttribute(IConfig.RESOURCE_ROOT) + "/" + name.replace(".", "/") + "/";
+        wcfg.setBaseDir(baseDir);
         // find the config
         InputStream in = null;
         // check the web app

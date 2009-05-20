@@ -1,6 +1,7 @@
 {
   "templates" : [
     {
+     "combineResources" : true,
      "id" : "welcome",
      "template" : "/WEB-INF/page-templates/base-page.html",
      "extends" : "blueprints-css",

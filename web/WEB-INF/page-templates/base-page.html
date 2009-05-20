@@ -20,8 +20,18 @@
                 <h1><^ insert("title") ^> </h1>
             </div>
             <^ include("header") ^> 
-            <p>            
-            <^ org.jmaki.Widget({ "id" : "w1", "name" : "jmaki.menu2"}) ^>
+            <p>
+            <^ org.jmaki.Widget({ "id" : "w1", "name" : "jmaki.menu2",
+                                  "value" : {
+                                    "menu" : [
+                                      { "label" : "Hello",
+                                        "menu" : [
+                                         {"label" : "World" } 
+                                        ]
+                                      }
+                                    ] }
+                                    }
+             ) ^>
             </p>
         </div>
     </div>

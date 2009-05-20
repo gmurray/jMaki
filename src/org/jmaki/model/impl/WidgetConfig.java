@@ -21,6 +21,7 @@ public class WidgetConfig extends BaseConfig {
     private boolean hasCSS = false;
     private boolean hasTemplate = false;
     private String widgetDir = null;
+    private String baseDir = null;
     private List<ResourceURI> scripts = null;
     private List<ResourceURI> styles = null;
     
@@ -32,6 +33,10 @@ public class WidgetConfig extends BaseConfig {
 
     public void setHasCss(boolean hasCSS) {
         this.hasCSS = hasCSS;
+    }
+    
+    public boolean getHasCss() {
+        return hasCSS;
     }
 
     public void setWidgetDir(String widgetDir) {
@@ -72,5 +77,13 @@ public class WidgetConfig extends BaseConfig {
     public List<ResourceURI> getStyles() {
         return styles;
     }
+
+	public void setBaseDir(String baseDir) {
+		this.baseDir = baseDir;
+	}
+
+	public String getBaseDir() {
+		return baseDir;
+	}
 
 }
