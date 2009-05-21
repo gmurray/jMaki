@@ -15,9 +15,10 @@ import org.jmaki.model.impl.WidgetFactory;
 import org.jmaki.model.impl.WidgetImpl;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.protorabbit.model.IParameter;
 
+import org.protorabbit.model.IParameter;
 import org.protorabbit.model.ITemplate;
+import org.protorabbit.model.impl.ResourceURI;
 import org.protorabbit.model.impl.BaseCommand;
 import org.protorabbit.model.impl.IncludeCommand;
 
@@ -88,18 +89,34 @@ public class WidgetCommand extends BaseCommand {
         }
         String tid = ctx.getTemplateId();
         ITemplate template = ctx.getConfig().getTemplate(tid);
-        Map<String, Boolean>widgetsWritten = (Map<String, Boolean>)ctx.getAttribute(WIDGETS_WRITTEN);
-        if (widgetsWritten == null) {
-            widgetsWritten = new HashMap<String, Boolean>();
-        }
         if (template != null) {
+            Map<String, Boolean>widgetsWritten = (Map<String, Boolean>)template.getAttribute(WIDGETS_WRITTEN);
+            if (widgetsWritten == null) {
+                widgetsWritten = new HashMap<String, Boolean>();
+                template.setAttribute(WIDGETS_WRITTEN, widgetsWritten);
+            }
             // write the template
             buffer.write(WidgetFactory.getWidgetFragment(widget, wcfg, wc).toString().getBytes());
 
             // only write out the dependencies if they haven't been written
             if (widgetsWritten.get(name) == null) {
+        
+                Boolean jmakiWritten = (Boolean)template.getAttribute(JMAKI_WRITTEN);
+             
                 // copy in the dependencies
                 List<org.protorabbit.model.impl.ResourceURI> scripts = template.getScripts();
+                // check for jmaki.js
+                if (jmakiWritten == null) {
+                    List<org.protorabbit.model.impl.ResourceURI> ascripts = template.getAllScripts(ctx);
+                    for (ResourceURI ri : ascripts) {
+                        if (ri.getUri().endsWith("jmaki.js") ||
+                            ri.getUri().endsWith("jmaki-min.js")) {
+                            jmakiWritten = new Boolean(true);
+                            template.setAttribute(JMAKI_WRITTEN, jmakiWritten);
+                            break; 
+                        }
+                    } 
+                }
 
                 List<org.jmaki.model.impl.ResourceURI> wscripts = wcfg.getScripts();
 
@@ -107,13 +124,12 @@ public class WidgetCommand extends BaseCommand {
                     scripts = new ArrayList<org.protorabbit.model.impl.ResourceURI>();
                     template.setScripts(scripts);
                 }
-                // add jmaki
-                Boolean jmakiWritten = (Boolean)ctx.getAttribute(JMAKI_WRITTEN);
+
                 if (jmakiWritten == null) {
                     scripts.add(new org.protorabbit.model.impl.ResourceURI("/resources/jmaki.js",
                                 "",
                                 org.protorabbit.model.impl.ResourceURI.SCRIPT));
-                    ctx.setAttribute(JMAKI_WRITTEN, new Boolean(true));
+                    template.setAttribute(JMAKI_WRITTEN, new Boolean(true));
                 }
                 scripts.add(new org.protorabbit.model.impl.ResourceURI(wcfg.getBaseDir() + "component.js",
                         "",
