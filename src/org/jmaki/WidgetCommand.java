@@ -148,7 +148,7 @@ public class WidgetCommand extends BaseCommand {
             if (deferredScripts == null) {
                 deferredScripts = new ArrayList<String>();
             }
-            String widgetJavaScript = "<script>jmaki.addWidget(" + jo.toString() + ");jmaki.debug=true;</script>";
+            String widgetJavaScript = "<script>jmaki.addWidget(" + jo.toString() + ");</script>";
             deferredScripts.add(widgetJavaScript);
             ctx.setAttribute(IncludeCommand.DEFERRED_SCRIPTS, deferredScripts);
         }
