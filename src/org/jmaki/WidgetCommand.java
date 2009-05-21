@@ -1,7 +1,6 @@
 package org.jmaki;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,8 +39,8 @@ public class WidgetCommand extends BaseCommand {
 
     @SuppressWarnings("unchecked")
     @Override
-    public void doProcess(OutputStream out) throws IOException {
-        System.out.println("param 1 is " + params[0] + " type is " + params[0].getType());
+    public void doProcess() throws IOException {
+
         if (params.length < 1 || params[0].getType() != IParameter.OBJECT) {
             getLogger().severe("Widget requires at least a name property");
             return;
@@ -95,15 +94,15 @@ public class WidgetCommand extends BaseCommand {
         }
         if (template != null) {
             // write the template
-            out.write(WidgetFactory.getWidgetFragment(widget, wcfg, wc).toString().getBytes());
+            buffer.write(WidgetFactory.getWidgetFragment(widget, wcfg, wc).toString().getBytes());
 
             // only write out the dependencies if they haven't been written
             if (widgetsWritten.get(name) == null) {
                 // copy in the dependencies
                 List<org.protorabbit.model.impl.ResourceURI> scripts = template.getScripts();
-    
+
                 List<org.jmaki.model.impl.ResourceURI> wscripts = wcfg.getScripts();
-    
+
                 if (scripts == null) {
                     scripts = new ArrayList<org.protorabbit.model.impl.ResourceURI>();
                     template.setScripts(scripts);
@@ -143,14 +142,15 @@ public class WidgetCommand extends BaseCommand {
                 }
                 widgetsWritten.put(name, new Boolean(true));
             }
+
             // add deferred properties
             List<String> deferredScripts = (List<String>)ctx.getAttribute(IncludeCommand.DEFERRED_SCRIPTS);
             if (deferredScripts == null) {
                 deferredScripts = new ArrayList<String>();
-                ctx.setAttribute(IncludeCommand.DEFERRED_SCRIPTS, deferredScripts);
             }
             String widgetJavaScript = "<script>jmaki.addWidget(" + jo.toString() + ");jmaki.debug=true;</script>";
             deferredScripts.add(widgetJavaScript);
+            ctx.setAttribute(IncludeCommand.DEFERRED_SCRIPTS, deferredScripts);
         }
     }
 }

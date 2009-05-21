@@ -44,7 +44,6 @@ public class WidgetFactory {
             cfgs.get(name) != null) {
             wcfg =  cfgs.get(name);
         } else {
-            System.out.println("Creating a new Widget Config for " + name);
             wcfg = new WidgetConfig();
         }
         String baseDir = "/" + ctx.getGlobalConfig().getAttribute(IConfig.RESOURCE_ROOT) + "/" + name.replace(".", "/") + "/";
@@ -60,7 +59,7 @@ public class WidgetFactory {
         }
         JSONObject json = null;
         if (in == null) {
-            System.out.println("No widget.json at " + resourceName);
+            getLogger().finer("No widget.json at " + resourceName);
         } else {
             json = JSONUtil.loadFromInputStream(in);
         }
@@ -128,7 +127,7 @@ public class WidgetFactory {
         replace(templateBuffer, "${webRoot}", ctx.getWebRoot()); 
         replace(templateBuffer, "${widgetDir}", wcfg.getWidgetDir());
         replace(templateBuffer, "${contextPath}", ctx.getContextRoot());
-       return templateBuffer;
+        return templateBuffer;
     }
 
     public static void replace(StringBuffer buff, String target, String replacement) {
