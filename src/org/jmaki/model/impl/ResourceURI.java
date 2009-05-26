@@ -52,7 +52,7 @@ public class ResourceURI implements ITestable {
         this.written = written;
     }
 
-    public String getUri() {
+    public String getURI() {
         return uri;
     }
     public void setUri(String uri) {

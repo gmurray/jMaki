@@ -109,8 +109,8 @@ public class WidgetCommand extends BaseCommand {
                if (jmakiWritten == null) {
                    List<org.protorabbit.model.impl.ResourceURI> ascripts = template.getAllScripts(ctx);
                    for (ResourceURI ri : ascripts) {
-                       if (ri.getUri().endsWith("jmaki.js") ||
-                           ri.getUri().endsWith("jmaki-min.js")) {
+                       if (ri.getURI().endsWith("jmaki.js") ||
+                           ri.getURI().endsWith("jmaki-min.js")) {
                            jmakiWritten = new Boolean(true);
                            template.setAttribute(JMAKI_WRITTEN, jmakiWritten);
                            break;
@@ -136,7 +136,7 @@ public class WidgetCommand extends BaseCommand {
                        org.protorabbit.model.impl.ResourceURI.SCRIPT));
                if (wscripts != null) {
                    for (org.jmaki.model.impl.ResourceURI ri : wscripts) {
-                       scripts.add(new org.protorabbit.model.impl.ResourceURI(ri.getUri(), ri.getBaseURI(), ri.getType()));
+                       scripts.add(new org.protorabbit.model.impl.ResourceURI(ri.getURI(), ri.getBaseURI(), ri.getType()));
                    }
                }
                List<org.protorabbit.model.impl.ResourceURI> styles = template.getStyles();
@@ -153,7 +153,7 @@ public class WidgetCommand extends BaseCommand {
                }
                if (wstyles != null) {
                    for (org.jmaki.model.impl.ResourceURI ri : wstyles) {
-                       styles.add(new org.protorabbit.model.impl.ResourceURI(ri.getUri(), ri.getBaseURI(), ri.getType()));
+                       styles.add(new org.protorabbit.model.impl.ResourceURI(ri.getURI(), ri.getBaseURI(), ri.getType()));
                    }
                }
                widgetsWritten.put(name, new Boolean(true));
