@@ -111,6 +111,5 @@ public class WidgetImpl implements IWidget {
 
     public void setArgs(Object args) {
         this.args = args;
-        
     }
 }

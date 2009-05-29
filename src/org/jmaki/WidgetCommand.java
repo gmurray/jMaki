@@ -31,7 +31,7 @@ public class WidgetCommand extends BaseCommand {
    private static final String WIDGETS_WRITTEN = null;
    private static Logger logger = null;
 
-   public static final Logger getLogger() {
+   static final Logger getLogger() {
        if (logger == null) {
            logger = Logger.getLogger("org.protrabbit");
        }

@@ -100,7 +100,7 @@ public abstract class BaseContext implements IContext {
 
     private static Logger logger;
 
-    public static Logger getLogger() {
+    static Logger getLogger() {
         if (logger == null) {
             logger = Logger.getLogger("org.jmaki");
         }
