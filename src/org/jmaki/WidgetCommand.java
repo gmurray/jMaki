@@ -16,6 +16,7 @@ import org.jmaki.model.impl.WidgetImpl;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import org.protorabbit.Config;
 import org.protorabbit.model.IParameter;
 import org.protorabbit.model.ITemplate;
 import org.protorabbit.model.impl.ResourceURI;
@@ -89,6 +90,8 @@ public class WidgetCommand extends BaseCommand {
        }
        String tid = ctx.getTemplateId();
        ITemplate template = ctx.getConfig().getTemplate(tid);
+       // turn off built in profiling end in protorabbit so we can track jmaki resource loading
+       ctx.setAttribute(Config.DEFAULT_EPISODE_PROCESS, null);
        if (template != null) {
            Map<String, Boolean>widgetsWritten = (Map<String, Boolean>)template.getAttribute(WIDGETS_WRITTEN);
            if (widgetsWritten == null) {

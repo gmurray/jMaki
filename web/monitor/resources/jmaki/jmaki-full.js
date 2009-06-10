@@ -1,10 +1,3 @@
-/**
- * jMaki JavaScript Client 1.9.1
- * 
- *  Find license at :
- *  http://developer.sun.com/berkeley_license.html
- *
- */
 if (typeof jmaki == "undefined") {
     var _globalScope = window;
 
@@ -74,7 +67,7 @@ if (typeof jmaki == "undefined") {
    };
 
     var ctx = {
-            version :"1.9.2",
+            version :"1.9",
             debugGlue :false,
             verboseDebug :false,
             debug :false,
@@ -139,7 +132,7 @@ if (typeof jmaki == "undefined") {
          if (typeof _obj == "undefined") {
              window[paths[0]] = _obj = {};
          }
-         for ( var ii = 1; ii < paths.length; ii+=1) {
+         for ( var ii = 1; ii < paths.length; ii++) {
              if (typeof _obj[paths[ii]] != "undefined") {
                  _obj = _obj[paths[ii]];
              } else {
@@ -157,7 +150,7 @@ if (typeof jmaki == "undefined") {
 
     var messageFormat = function(_message, _args) {
         if (typeof _message != "undefined" &&  typeof _args != "undefined") {
-            for (var i=0; i < _args.length; i+=1) {
+            for (var i=0; i < _args.length; i++) {
                 var rex = new RegExp("\\{" + i + "\\}", "g");
                 _message =  _message.replace(rex, _args[i]);
             }
@@ -204,7 +197,7 @@ if (typeof jmaki == "undefined") {
     };
 
      var genId = function() {
-         return "jmk" + (ctx.counter+=1);
+         return "jmk" + ctx.counter++;
      };
 
     var createElement = function(type) {
@@ -321,14 +314,14 @@ if (typeof jmaki == "undefined") {
             if (patpos+i<patlen) {
                 switch (pattern.charAt(patpos + i)) {
                 case "?":
-                    i+=1;
+                    i++;
                     continue;
                 case '*':
                     star = true;
                     strpos += i;
                     patpos += i;
                     do {
-                        patpos+=1;
+                        ++patpos;
                         if (patpos == patlen) {return true;}
                     } while (pattern.charAt(patpos) == '*');
                     i=0;
@@ -336,20 +329,20 @@ if (typeof jmaki == "undefined") {
                 }
                 if (topic.charAt(strpos + i) != pattern.charAt(patpos + i)) {
                     if (!star) {return false;}
-                    strpos+=1;
+                    strpos++;
                     i=0;
                     continue;
                 }
-                i+=1;
+                i++;
             } else {
                 if (!star) {return false;}
-                strpos+=1;
+                strpos++;
                 i=0;
             }
         }
         do {
             if (patpos + i == patlen) {return true;}
-        } while(pattern.charAt(patpos + (i+=1))=='*');
+        } while(pattern.charAt(patpos + i++)=='*');
         return false;
     };
 
@@ -358,7 +351,7 @@ if (typeof jmaki == "undefined") {
      *  @param _lis
      */
     function unsubscribe(_lis) {
-        for (var _l=0; _l < ctx.subs.length;_l+=1) {
+        for (var _l=0; _l < ctx.subs.length;_l++ ) {
             if (ctx.subs[_l].id  == _lis.id) {
                 ctx.subs.splice(_l,1);
                 break;
@@ -377,7 +370,7 @@ if (typeof jmaki == "undefined") {
         var _obj;
         if (t instanceof Array) {
             _obj = [];
-            for (var _j=0;_j< t.length;_j+=1) {
+            for (var _j=0;_j< t.length;_j++) {
                 if (typeof t[_j] != "function") {
                     _obj.push(clone(t[_j]));
                 }
@@ -412,7 +405,7 @@ if (typeof jmaki == "undefined") {
                return _o;
            }
         } else  {
-            _cd+=1;
+            _cd++;
         }
 
         var _rs = [];
@@ -420,7 +413,7 @@ if (typeof jmaki == "undefined") {
             return 'undefined';
         }
         if (_o instanceof Array) {
-            for (var i=0; i < _o.length; i+=1) {
+            for (var i=0; i < _o.length; i++) {
                 _rs.push(inspect(_o[i],_ind,_cd));
             }
             return "[" +  _rs.join(" , ") + "]";
@@ -453,7 +446,7 @@ if (typeof jmaki == "undefined") {
             found = true;
         }
         if (typeof _obj != "undefined"){
-            for (var ii =1; ii < paths.length; ii+=1) {
+            for (var ii =1; ii < paths.length; ii++) {
                 var _lp = paths[ii];
                 if (_lp.indexOf('()') != -1){
                   var _ns = _lp.split('()');
@@ -514,7 +507,7 @@ if (typeof jmaki == "undefined") {
 
         // check the glue for listeners
         if (ctx.subs){
-            for (var _l=0; _l < ctx.subs.length;_l+=1 ) {
+            for (var _l=0; _l < ctx.subs.length;_l++ ) {
                 var _listener = ctx.subs[_l];
                      if ((_listener.topic instanceof RegExp &&
                           _listener.topic.test(name))  ||
@@ -561,7 +554,7 @@ if (typeof jmaki == "undefined") {
                 } else if (ctx.subs[_l].action == 'forward') {
                     var _topics = ctx.subs[_l].topics;
                     // now multiplex the event
-                    for (var ti = 0; ti < _topics.length; ti+=1){
+                    for (var ti = 0; ti < _topics.length; ti++){
                         // don't cause a recursive loop if the topic is this one
                         if (_topics[ti] != name) {
                             publish(_topics[ti], args);
@@ -579,7 +572,7 @@ if (typeof jmaki == "undefined") {
             window.frames !== null &&
             window.frames.length > 0) {
             var _frames = ctx.dcontainers.keys();
-            for (var i=0; i < _frames.length; i+=1){
+            for (var i=0; i < _frames.length; i++){
               var _dc = ctx.dcontainers.get(_frames[i]);
               if (_dc.iframe && !_dc.externalDomain && window.frames[_dc.uuid + "_iframe"] && window.frames[_dc.uuid + "_iframe"].jmaki){
                   window.frames[_dc.uuid + "_iframe"].jmaki.publish("/global" + name, args, true, false);
@@ -676,7 +669,7 @@ if (typeof jmaki == "undefined") {
         var _target;
 
         this.processTopic = function() {
-            for (var ti = 0; ti < args.topics.length; ti+=1){
+            for (var ti = 0; ti < args.topics.length; ti++){
                 publish(args.topics[ti], {topic: args.topics[ti],
                 type:'timer',
                 src:_src,
@@ -709,6 +702,7 @@ if (typeof jmaki == "undefined") {
             window.setTimeout(_src.run,args.to);
         };
     };
+
 
     /**
      *  Get the XMLHttpRequest object
@@ -855,6 +849,7 @@ if (typeof jmaki == "undefined") {
         }
     };
 
+
     /**
      * Generalized XMLHttpRequest which can be used from evaluated code. Evaluated code is not allowed to make calls.
      * @param args is an object literal containing configuration parameters including method[get| post, get is default], body[bodycontent for a post], asynchronous[true is default]
@@ -942,7 +937,7 @@ if (typeof jmaki == "undefined") {
         }
         // add headers
         if (args.headers && args.headers.length > 0) {
-            for (var _h=0;_h < args.headers.length; _h+=1) {
+            for (var _h=0;_h < args.headers.length; _h++) {
                 _req.setRequestHeader(args.headers[_h].name, args.headers[_h].value);
             }
         }
@@ -980,7 +975,6 @@ if (typeof jmaki == "undefined") {
             }
             updateAjaxQueue();
         }
-        return _req;
      };
 
      /**
@@ -1009,7 +1003,7 @@ if (typeof jmaki == "undefined") {
       */
      var getAllChildren = function(target, children) {
          var _nc = target.childNodes;
-         for (var l=0; _nc && l <  _nc.length; l+=1) {
+         for (var l=0; _nc && l <  _nc.length; l++) {
              if (_nc[l].nodeType == 1) {
                  children.push(_nc[l]);
                  if (_nc[l].childNodes.length > 0) {
@@ -1063,7 +1057,7 @@ if (typeof jmaki == "undefined") {
       */
      var replaceStyleClass = function (root, oldStyle, targetStyle) {
          var elements = getElementsByStyle(oldStyle,root);
-         for (var i=0; i < elements.length; i+=1) {
+         for (var i=0; i < elements.length; i++) {
              // Handle cases where there are multiple classnames
              if (elements[i].className.indexOf(' ') != -1) {
                  var classNames = elements[i].className.split(' ');
@@ -1085,11 +1079,12 @@ if (typeof jmaki == "undefined") {
       * @param _ext Object representing widget to load
       */
      this.loadExtension = function(_ext) {
+	 
          if (ctx.extensions.get(_ext)){
-             return null;
+             return;
          }
          var targetName ="jmaki.extensions." + _ext.name + ".Extension";
-         var Con = findObject(targetName);
+         var Con = findObject(targetName);       
          if (typeof Con != "function") {
              log(getMessage("extension_constructor_not_found", [targetName]));
          } else {
@@ -1098,9 +1093,8 @@ if (typeof jmaki == "undefined") {
                ex.postLoad.call(window);
            }
            ctx.extensions.put(_ext.name, ex);
-           return ex;
          }
-         return null;
+
      };
 
      function logError(message, div) {
@@ -1122,14 +1116,13 @@ if (typeof jmaki == "undefined") {
          logError(message, div);
      }
 
+
      /**
       * Load a widget
       * @param _jmw Object representing widget to load
       */
      var loadWidget = function(_jmw) {
-         if (window.postMessage) {
-             window.postMessage("EPISODES:mark:jmaki.loadWidget(" + _jmw.name + "#" + _jmw.uuid +  ")", "*");
-         }
+
          // see if the widget has been defined.
          if (ctx.attributes.get(_jmw.uuid) != null) {
              return null;
@@ -1145,10 +1138,6 @@ if (typeof jmaki == "undefined") {
          if ((typeof _jmw.value == 'string') && _jmw.value.indexOf("@{") === 0) {
              var _vw = /[^@{].*[^}]/.exec(_jmw.value);
              _jmw.value = findObject(_vw + "");
-         }      
-         if ((typeof _jmw.args == 'string') && _jmw.args.indexOf("@{") === 0) {
-             var _va = /[^@{].*[^}]/.exec(_jmw.args);
-             _jmw.args = findObject(_va + "");
          }
          // do not wrap IE with exception handler
          // because we can't get the right line number
@@ -1194,7 +1183,7 @@ if (typeof jmaki == "undefined") {
              }
              // map in any subscribe handlers.
              if (_jmw.subscribe && _jmw.subscribe.push) { //string also have length property
-                 for (var _wi = 0; _wi < _jmw.subscribe.length; _wi+=1) {
+                 for (var _wi = 0; _wi < _jmw.subscribe.length; _wi++) {
                      var _t = _jmw.subscribe[_wi].topic;
                      var _m = _jmw.subscribe[_wi].handler;
                      var _h = null;
@@ -1210,15 +1199,16 @@ if (typeof jmaki == "undefined") {
                  }
              }
              publish("/jmaki/runtime/widget/loaded", { id : _jmw.uuid});
-             if (window.postMessage) {
-                 window.postMessage("EPISODES:measure:jmaki.loadWidget(" + _jmw.name + "#" + _jmw.uuid +  ")", "*");
-             }
              return wimpl;
          } else {
              logError(getMessage("widget_instantiation_error",[targetName]), getElement(_jmw.uuid ));
          }
          return null;
      };
+
+
+
+
 
      /**
       * An easy way to get a instance of a widget.
@@ -1246,7 +1236,7 @@ if (typeof jmaki == "undefined") {
       * destroy all registered widgets under the target node
       * @param _root - The _root to start at. All widgets will be removed if not specified.
       */
-     var clearWidgets = function(_root) {
+     this.clearWidgets = function(_root) {
 
          if (!isDefined(_root)) {
              var _k = ctx.attributes.keys();
@@ -1257,7 +1247,7 @@ if (typeof jmaki == "undefined") {
              ctx.widgets = [];
          } else {
             var _ws = getAllChildren(_root,[]);
-            for (var ll=0; ll < _ws.length; ll+=1) {
+            for (var ll=0; ll < _ws.length; ll++) {
                  if (_ws[ll].id) {
                      removeWidget(_ws[ll].id);
                  }
@@ -1300,7 +1290,7 @@ if (typeof jmaki == "undefined") {
       * @param id The id of the extension
       */
      var getExtension = function(id) {
-         return ctx.extensions.get(id) || null;
+         return ctx.extensions.get(id);
      };
 
      /**
@@ -1490,6 +1480,8 @@ if (typeof jmaki == "undefined") {
          return {h : rn.clientHeight, w : rn.clientWidth};
      };
 
+
+
      var addTimers = function(_timers){
          if (isDefined(_timers)){
              for (var _l=0; _l <_timers.length;_l++ ) {
@@ -1519,9 +1511,7 @@ if (typeof jmaki == "undefined") {
      };
 
      var addTimer = function(_timer){
-         var timers = [];
-         timers.push(_timer);
-         addTimers(timers);
+         addTimers([_timer]);
      };
 
     var postInitialize = function() {
@@ -1797,16 +1787,10 @@ if (typeof jmaki == "undefined") {
                               if (wf !== null) {
                                   wf.findAndAdd(injectionPoint);
                               }
-                              if (typeof task.callback == 'function') {
-                                  task.callback.apply({}, [{status : 'success'}]);
-                              }
                               processNextTask();
                           });
                       } catch (e) {
                           injectionPoint.innerHTML = "<span style='color:red'>" + e.message + "</span>";
-                          if (typeof task.callback == 'function') {
-                              task.callback.apply({}, [{status : 'fail'}]);
-                          }
                       }
                   }
               }, 25);
@@ -1828,14 +1812,14 @@ if (typeof jmaki == "undefined") {
            *                    Content is injected by setting the innerHTML property
            *                    of an element to the template text.
            */
-          function inject(task) {           
+          function inject(task) {     	  
               _processing = true;
 
               doAjax({
                     method:"GET",
                     url: task.url,
                     asynchronous: false,
-                    callback: function(req) {               
+                    callback: function(req) {         	  
                        getContent(req.responseText, task);
                        //if no parent is given append to the document root
                        var injectionPoint;
@@ -1854,7 +1838,7 @@ if (typeof jmaki == "undefined") {
                            } else {
                                processTask(injectionPoint, task);
                            }
-                        } else {                        
+                        } else {                    	
                             processTask(task.injectionPoint, task);
                         }
                  },
@@ -2007,7 +1991,7 @@ if (typeof jmaki == "undefined") {
 
            var resize = function() {
                var _dim = getDimensions(_container);
-               if (autoSizeH === true || autoSizeW === true){
+               if (autoSizeH || autoSizeW){
                    if (!_container.parentNode){
                        return;
                    }
@@ -2015,7 +1999,7 @@ if (typeof jmaki == "undefined") {
                    if (_container.parentNode.nodeName == "BODY") {
                        if (window.innerHeight){
                            if (autoSizeH) {
-                               VIEWPORT_HEIGHT = window.innerHeight - pos.y;
+                               VIEWPORT_HEIGHT = window.innerHeight - pos.y ;
                            }
                            if (autoSizeW) {
                                VIEWPORT_WIDTH = window.innerWidth - 20;
@@ -2048,21 +2032,37 @@ if (typeof jmaki == "undefined") {
                            }
                        }
                    }
+                   if (autoSizeH) {
+                       if (VIEWPORT_HEIGHT < 0) {
+                           VIEWPORT_HEIGHT = 320;
+                       }
+                       _container.style.height = VIEWPORT_HEIGHT + "px";
+                   }
+                   if (autoSizeW) {
+                       _container.style.width = VIEWPORT_WIDTH + "px";
+                   }
+               } else {
+                   _container.style.width = VIEWPORT_WIDTH + "px";
+                   _container.style.height = VIEWPORT_HEIGHT + "px";
                }
-               _container.style.height = VIEWPORT_HEIGHT - 55 + "px";
-               if (_self.iframe) {
-                       _self.iframe.style.height = VIEWPORT_HEIGHT - 55 + "px";
+               if (VIEWPORT_HEIGHT < 0) {
+                   VIEWPORT_HEIGHT = 320;
                }
-               _container.style.width = VIEWPORT_WIDTH + "px";
-               if (_self.iframe) {
-                   _self.iframe.style.width = VIEWPORT_WIDTH -2 + "px";
-                }
+               if (VIEWPORT_WIDTH < 0) {
+                   VIEWPORT_WIDTH = 500;
+               }
 
+               if (args.useIframe) {
+                   if (_self.iframe) {
+                       _self.iframe.style.height = VIEWPORT_HEIGHT -2 + "px";
+                       _self.iframe.style.width = VIEWPORT_WIDTH -2 + "px";
+                   }
+               }
                // used for tracking with IE
                oldWidth = body.clientWidth;
            };
 
-           var loadURL = function(_url, _callback){
+           var loadURL = function(_url){
                // shut down all events published to iframe
                if (_self.iframe) {
                    _self.externalDomain = true;
@@ -2125,8 +2125,8 @@ if (typeof jmaki == "undefined") {
                      }
                      _self.iframe.src = _self.url;
                 }
-               } else {             
-                   ctx.injector.inject({url: _self.url, injectionPoint: _container, callback : _callback});  
+               } else {      	   
+                   ctx.injector.inject({url: _self.url, injectionPoint: _container});  
                }
            };
 
@@ -2171,26 +2171,25 @@ if (typeof jmaki == "undefined") {
                    _ot.style.overflowY = args.overflowY;
                }
                if (args.startWidth) {
-                   VIEWPORT_WIDTH = args.startWidth;
+                   VIEWPORT_WIDTH = Number(args.startWidth);
                    _container.style.width = VIEWPORT_WIDTH + "px";
                } else {
                    VIEWPORT_WIDTH = _container.clientWidth;
                    autoSizeW = true;
                }
                if (args.startHeight) {
-                   VIEWPORT_HEIGHT = args.startHeight;
+                   VIEWPORT_HEIGHT = Number(args.startHeight);
                } else {
                    VIEWPORT_HEIGHT = _container.clientHeight;
                    autoSizeH = true;
                }
-             
-               if (args.startHeight || autoSizeH !== true) {
-                   _container.style.height = VIEWPORT_HEIGHT + "px";
-                   if (args.useIFrame &&  _self.iframe) {
-                       _self.iframe.style.height = VIEWPORT_HEIGHT + "px";
-                   }
+               if (VIEWPORT_HEIGHT <= 0) {
+                   VIEWPORT_HEIGHT = 320;
                }
-
+               _container.style.height = VIEWPORT_HEIGHT + "px";
+               if (args.useIFrame &&  _self.iframe) {
+                   _self.iframe.style.height = VIEWPORT_HEIGHT + "px";
+               }
                resize();
                if (args.url && !args.useIframe) {
                    loadURL(args.url);
@@ -2494,31 +2493,15 @@ if (typeof jmaki == "undefined") {
      * override initial onload.
      */
     window.onload = function() {
-        if (typeof oldLoad  == 'function') {
-            oldLoad();
-        }
         if (!ctx.initialized) {
-            if (window.postMessage) {
-                window.postMessage("EPISODES:mark:jmaki.loadWidgets", "*");
-            }
             initialize();
-            if (window.postMessage) {
-                window.postMessage("EPISODES:measure:jmaki.loadWidgets", "*");
-            }
         } else {
-
-            if (window.postMessage) {
-                window.postMessage("EPISODES:mark:jmaki.loadWidgets", "*");
-            }
             bootstrapWidgets();
-            if (window.postMessage) {
-                window.postMessage("EPISODES:measure:jmaki.loadWidgets", "*");
-            }
             return;
         }
-
-        if (window.postMessage) {
-            window.postMessage("EPISODES:done", "*");
+        
+        if (typeof oldLoad  == 'function') {
+            oldLoad();
         }
     };
 
@@ -2547,7 +2530,6 @@ if (typeof jmaki == "undefined") {
         replaceStyleClass : replaceStyleClass,
         getAllChildren : getAllChildren,
         getWidget : getWidget,
-        clearWidgets : clearWidgets,
         loadWidget : loadWidget,
         loadExtension : loadExtension,
         getExtension : getExtension,
@@ -2575,3 +2557,332 @@ if (typeof jmaki == "undefined") {
     return ctx;
 }();
 }
+
+/**
+ * jMaki Widget Loader 1.8.1 for Plain HTML
+ * 
+ * For full source see : https://jmaki-ext.dev.java.net
+ *
+ */
+/**
+ * jMaki Widget Loader 1.9.1 for Plain HTML
+ * 
+ * For full source see : https://jmaki-ext.dev.java.net
+ *
+ */
+jmaki.namespace("jmaki.extensions.widgetFactory");
+    
+jmaki.extensions.widgetFactory.Extension = function(eargs) {
+    
+   var factory = this;
+   factory.autoLoad = true;
+   factory.loading = new jmaki.Map();
+    
+   jmaki.log("Loaded Widget Factory 1.9.1");      
+
+   function createElementMap(target, prop) {
+        var _map = {};
+        var elms = document.getElementsByTagName(target);          
+        for (var i = 0; i < elms.length; i++) {
+            if (elms[i][prop]) _map[elms[i][prop]] = true;                    
+        }
+        return _map;
+    }
+
+    // list of the currently loaded scripts
+    factory.gscripts = createElementMap("script", "src");
+    // list of currently loaded styles
+    factory.gstyles = createElementMap("link", "href");
+
+    // load the widget.json
+    this.loadWidgetJson = function(_widgetDir) {
+        var obj = null;
+        jmaki.doAjax({
+            url : _widgetDir + "widget.json",
+            asynchronous : false,
+            callback : function(req) {
+                if (req.responseText != '') {
+                	try {              		
+                        obj = eval("(" + req.responseText + ")");
+                	} catch(e){
+                		jmaki.log("Error loading widget" + e);
+                	}
+                }
+            }
+        });
+        return obj;        
+    };
+    
+    /**
+     * Programtically load any jMaki widget and it's resources from the browser
+     *
+     */    
+    this.loadWidget = function(props,_forceResources) {     	
+        var forceResources = false;
+        if (typeof _forceResources != "undefined") forceResources = _forceResources;
+        // this is a reference to the document are working on
+        var tdoc = window.document;
+        // include the scripts
+        var _wargs = props.widget;
+        var container = props.container;      
+        var _wjson = props.wjson;
+        var widgetDir = _wargs.widgetDir;
+        // use default widgetDir if not provided
+        if (!widgetDir) {
+        	// do global replace of . with /
+            var temps = _wargs.name.split('.');
+            widgetDir = jmaki.webRoot + jmaki.resourcesRoot + "/" + temps.join("/") + "/";  
+            _wargs.widgetDir = widgetDir;        
+        }
+        var _callback = props.callback;
+        if (!_wargs.uuid)_wargs.uuid = jmaki.genId();
+        if (!container.id) container.id = _wargs.uuid + "_wrapper_";         
+        // try to load the widget.json   
+        if (!_wjson) {
+            _wjson = factory.loadWidgetJson(widgetDir);
+        }
+    
+        function normalizeURL(url) {
+            if (/../.test(url)) {
+                var toks = url.split("/");
+                if (toks.length >0){
+                    var _count=0;
+                    var _index = toks.length -1;
+                    while (_index >= 0) {
+                        if (toks[_index] == '..'){                            
+                            _count++;
+                        } else {
+                            // we have the end of a set
+                            if (_count > 0) {
+                                var _start = _index - (_count -1);
+                                var _slen = _count * 2;
+                                // don't go beyond size minimal size
+                                if (_index - _count<  0){
+                                    _start = 0;
+                                }
+                                toks.splice(_start,_slen);                                
+                                _count = 0;
+                            }
+                        }
+                        _index--;                        
+                    }  
+                }
+                return toks.join("/");
+            } else {
+                return url;
+            }
+        }
+
+        function loadTemplate(caller) {   
+           // load the template       
+           jmaki.doAjax({ url : widgetDir + "component.htm",
+               asynchronous : false,
+               callback : function(req) {                  
+                   // global regex replace not working so using arrays
+                   var temps = req.responseText.split('${uuid}');
+                   template = temps.join(_wargs.uuid);
+                   temps = template.split('${widgetDir}');
+                   template = temps.join(_wargs.widgetDir);
+                   if (_wargs.value && /\${value}/i.test(template)) {
+                       temps = template.split('${value}');
+                       template = temps.join(_wargs.value + '');                	   
+                   }                   
+                   container.innerHTML = template + "<div id='_" + _wargs.uuid + "_'></div>";
+               }
+           });
+           
+          // wait for the content to be loaded
+          var _t = setInterval(function() {
+              if (tdoc.getElementById("_" + _wargs.uuid + "_") != null) {
+                  clearInterval(_t);                                         
+                  initWidget();              
+              }
+          }, 10);
+       }
+       
+       function initWidget() { 	   
+           // load the css and add only if the fille exists and ! wjson.hasCSS == false
+           if ((!factory.gstyles[widgetDir + "component.css"]  || forceResources) &&
+                !(_wjson && typeof _wjson.hasCSS == "boolean" && _wjson.hasCSS == false)  ) {
+               jmaki.doAjax({ url : widgetDir + "component.css",
+               callback : function(req) {          	   
+                   jmaki.loadStyle(widgetDir + "component.css");
+                   factory.gstyles[widgetDir + "component.css"] = true;
+               }});               
+           } 
+           // check for the constructor and if we don't find it load and wait for the component.js to load
+           if ( jmaki.findObject("jmaki.widgets." + _wargs.name + ".Widget") == null) { 
+        	     jmaki.addLibraries({
+                     libs :
+                   [widgetDir + "component.js"],
+                   callback :  function() {     
+                       factory.gscripts[widgetDir + "component.js"] = true;          
+                       // create an instance and feed it the wargs using jmaki                                  
+                       var _wimpl = jmaki.loadWidget(_wargs);  
+                       factory.loading.remove(_wargs.uuid);
+                       if (_wimpl && typeof _callback == "function") {
+                           _callback(_wimpl, _wargs, container);  
+                       }
+                       container.style.visibility = "visible"; 
+                   },
+                   inprocess : undefined,
+                   cleanup : false});
+           } else {	        
+                   var _wimpl = jmaki.loadWidget(_wargs);
+                   factory.loading.remove(_wargs.uuid);
+                   if (_wimpl && typeof _callback == "function") {
+                       _callback(_wimpl, _wargs, container);  
+                   }
+                   container.style.visibility = "visible";            
+           }    
+       }
+        // load any dependencies
+        if ( _wjson  && _wjson.config) {
+           var _cfg = _wjson.config.type;
+            
+           if (_cfg.themes) {
+               var theme;
+               // check each theme if they are the default. Last one wins      
+               for (var i=0; i < _cfg.themes.length; i++) {
+                  if (_cfg.themes[i]['default'] == true) {
+                      theme = _cfg.themes[i].style;
+                  }
+                  // exit if there is a match to global theme
+                  if (_cfg.themes[i].id == jmaki.config.globalTheme) {
+                      theme = _cfg.themes[i].style;
+                      break;
+                  }
+               }
+               var _url = normalizeURL(widgetDir +  theme);
+               if (!factory.gstyles[_url]){
+                    jmaki.loadStyle(_url);
+                    factory.gstyles[_url] = true;   
+               }
+           } 
+           // load styles
+           if (_cfg.styles) {                
+               for (var j=0; j < _cfg.styles.length; j++) {             
+                   var _url2 = normalizeURL(((/^http/i.test(_cfg.styles[j])) ? '' : widgetDir) + _cfg.styles[j]);                
+                    if (!factory.gstyles[_url2]){                      
+                        jmaki.loadStyle(_url2);
+                        factory.gstyles[_url2] = true; 
+                    }
+               }
+           }
+           // do preload
+           if (_cfg.preload) {
+               _globalScope.eval(_cfg.preload);
+           }
+
+           // load all javascripts
+           if (_cfg.libs) {
+               var _libs = [];
+               for (var ii = _cfg.libs.length -1; ii >= 0; ii--) {
+            	   var _clib = _cfg.libs[ii];
+            	   // test resource expression against user agent. If true add the resource
+                    if (_cfg.libs[ii].uaTest) {
+                    	if (_cfg.libs[ii].uaTest) {
+                    		var t = new RegExp(_cfg.libs[ii].uaTest);
+                    		if (t.test(navigator.userAgent) === true) {
+                    			_clib = _clib.lib;
+                    		} else {
+                    			continue;
+                    		}
+                    	}
+                    }
+                    var _url3 = normalizeURL(((/^http/i.test(_clib)) ? '' :  widgetDir) + _clib);                    
+                    if (!factory.gscripts[_url3]) {
+                       factory.gscripts[_url3] = true;
+                       _libs.push(_url3);                    
+                    }
+               }           
+               if (_libs.length >0){
+                   jmaki.addLibraries( { libs : _libs, callback : loadTemplate, cleanup :  false});
+               } else {
+                  loadTemplate(); 
+               }
+           } else {
+               loadTemplate();
+           }
+        } else {
+            loadTemplate();
+        }
+    };
+    /**
+     * Find declarative markup an element using jmakiName, jmakiArgs, jmakiValue,
+     * jmakiId, jmakiPublish, jmakiSubscribe all of which map to the properties a
+     * normal jMaki widget would need  to load.
+    */
+    this.findAndAdd = function(_target, _callback) {
+    	
+        var target = _target || document.body;
+        if (typeof _target == "string") target = document.getElementById(targetId); 
+        var targets = jmaki.getAllChildren(target, []);
+        
+        for (var i=0; targets && i < targets.length; i++) {
+         
+            if (targets[i] && targets[i].getAttribute('jmakiName')) {
+                var widget = {};
+                widget.name = targets[i].getAttribute('jmakiName');
+                if (targets[i].getAttribute('jmakiArgs')) {
+                	try {
+                	widget.args = eval("(" + targets[i].getAttribute('jmakiArgs') + ")");
+                	} catch(e){
+                		jmaki.log("Error Parsing Args:" + e);
+                	}
+                }
+                var val;
+                var valString = targets[i].getAttribute('jmakiValue');            
+                if (typeof valString == "string" && !(/@\{/.test(valString)) &&  (/\[/.test(valString)|| /\{/.test(valString))) {          	
+                	try {         		
+                	    widget.value = eval("(" + valString + ")" );              
+                	} catch (e){
+                		jmaki.log("Error Parsing Value :" + e);
+                	}
+                } else if (typeof valString != 'undefined') {
+                	widget.value = valString;
+                }          
+                if (targets[i].getAttribute('jmakiService'))widget.service = targets[i].getAttribute('jmakiService');
+                if (targets[i].getAttribute('jmakiPublish'))widget.publish = targets[i].getAttribute('jmakiPublish');
+                if (targets[i].getAttribute('jmakiSubscribe')){
+                    var sub = targets[i].getAttribute('jmakiSubscribe');
+                    // we have an array
+                    if (/\[/.test(sub)) {
+                        widget.subscribe = eval("(" + sub + ")");
+                    } else {
+                        widget.subscribe = sub;
+                    }
+                }
+                if (targets[i].getAttribute('jmakiId'))widget.uuid = targets[i].getAttribute('jmakiId');
+                var loc = targets[i];
+                factory.loading.put(widget.uuid, true);
+                factory.loadWidget({widget : widget, container : loc });
+            }
+        }
+        // wait for the widgets to be loaded                
+        var _lt = setInterval(function() {              	
+            if (factory.loading.keys().length === 0) {
+            	clearInterval(_lt);  
+                factory.loadCallback.apply({}, []);           
+            }
+        }, 10);
+    };
+    // auto load
+    if (eargs.args &&
+        typeof eargs.args.parseOnLoad == "boolean") {
+            factory.autoload = eargs.args.parseOnLoad;
+    }
+    factory.loadCallback = function() {
+        jmaki.publish("/jmaki/extensions/widgetFactory/loadComplete",{});
+    };
+    if (factory.autoLoad) {
+        if (jmaki.loaded) factory.findAndAdd();
+        else {
+            jmaki.subscribe("/jmaki/runtime/loadComplete", function() {
+                if (factory.autoLoad) factory.findAndAdd();
+            });
+        }
+    }
+};
+
+jmaki.loadExtension({ name : "widgetFactory", args : {parseOnLoad : true}});
