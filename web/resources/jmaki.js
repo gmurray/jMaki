@@ -1,5 +1,5 @@
 /**
- * jMaki JavaScript Client 1.9.1
+ * jMaki JavaScript Client 1.9.2
  * 
  *  Find license at :
  *  http://developer.sun.com/berkeley_license.html
