@@ -17,6 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import org.protorabbit.Config;
+import org.protorabbit.model.IContext;
 import org.protorabbit.model.IParameter;
 import org.protorabbit.model.ITemplate;
 import org.protorabbit.model.impl.ResourceURI;
@@ -40,8 +41,7 @@ public class WidgetCommand extends BaseCommand {
    }
 
    @SuppressWarnings("unchecked")
-   @Override
-   public void doProcess() throws IOException {
+   public void doProcess(IContext ctx) throws IOException {
 
        if (params.length < 1 || params[0].getType() != IParameter.OBJECT) {
            getLogger().severe("Widget requires at least a name property");
@@ -71,8 +71,8 @@ public class WidgetCommand extends BaseCommand {
 
        GlobalConfig gcfg = new GlobalConfig();
        // get request and response off the protorabbit context
-       HttpServletRequest req = ((org.protorabbit.servlet.WebContext)this.getContext()).getRequest();
-       HttpServletResponse resp =  ((org.protorabbit.servlet.WebContext)this.getContext()).getResponse();
+       HttpServletRequest req = ((org.protorabbit.servlet.WebContext)ctx).getRequest();
+       HttpServletResponse resp =  ((org.protorabbit.servlet.WebContext)ctx).getResponse();
        // create a web context
        WebContext wc = new WebContext( req, resp, gcfg);
        if (uuid == null) {
@@ -88,10 +88,10 @@ public class WidgetCommand extends BaseCommand {
            // TODO Auto-generated catch block
            e.printStackTrace();
        }
-       String tid = getContext().getTemplateId();
-       ITemplate template = getContext().getConfig().getTemplate(tid);
+       String tid = ctx.getTemplateId();
+       ITemplate template = ctx.getConfig().getTemplate(tid);
        // turn off built in profiling end in protorabbit so we can track jmaki resource loading
-       getContext().setAttribute(Config.DEFAULT_EPISODE_PROCESS, null);
+       ctx.setAttribute(Config.DEFAULT_EPISODE_PROCESS, null);
        if (template != null) {
            Map<String, Boolean>widgetsWritten = (Map<String, Boolean>)template.getAttribute(WIDGETS_WRITTEN);
            if (widgetsWritten == null) {
@@ -99,7 +99,7 @@ public class WidgetCommand extends BaseCommand {
                template.setAttribute(WIDGETS_WRITTEN, widgetsWritten);
            }
            // write the template
-           getBuffer().write(WidgetFactory.getWidgetFragment(widget, wcfg, wc).toString().getBytes());
+           getBuffer( ctx ).write(WidgetFactory.getWidgetFragment(widget, wcfg, wc).toString().getBytes());
 
            // only write out the dependencies if they haven't been written
            if (widgetsWritten.get(name) == null) {
@@ -110,7 +110,7 @@ public class WidgetCommand extends BaseCommand {
                List<org.protorabbit.model.impl.ResourceURI> scripts = template.getScripts();
                // check for jmaki.js
                if (jmakiWritten == null) {
-                   List<org.protorabbit.model.impl.ResourceURI> ascripts = template.getAllScripts(getContext());
+                   List<org.protorabbit.model.impl.ResourceURI> ascripts = template.getAllScripts( ctx );
                    for (ResourceURI ri : ascripts) {
                        if (ri.getURI().endsWith("jmaki.js") ||
                            ri.getURI().endsWith("jmaki-min.js")) {
@@ -163,13 +163,13 @@ public class WidgetCommand extends BaseCommand {
            }
 
            // add deferred properties
-           List<String> deferredScripts = (List<String>)getContext().getAttribute(IncludeCommand.DEFERRED_SCRIPTS);
+           List<String> deferredScripts = (List<String>)ctx.getAttribute(IncludeCommand.DEFERRED_SCRIPTS);
            if (deferredScripts == null) {
                deferredScripts = new ArrayList<String>();
            }
            String widgetJavaScript = "<script>jmaki.addWidget(" + jo.toString() + ");</script>";
            deferredScripts.add(widgetJavaScript);
-           getContext().setAttribute(IncludeCommand.DEFERRED_SCRIPTS, deferredScripts);
+           ctx.setAttribute(IncludeCommand.DEFERRED_SCRIPTS, deferredScripts);
        }
    }
 }

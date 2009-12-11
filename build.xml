@@ -15,7 +15,7 @@
       <mkdir dir="${build.dir}/classes" />
       <javac srcdir="src"
           destdir="${build.classes}"
-          classpath="${build.classes}:lib/servlet-api-2.4.jar:lib/org.json-0.0.2.jar:lib/protorabbit-0.9.6.jar"
+          classpath="${build.classes}:lib/servlet-api-2.4.jar:lib/org.json-0.0.2.jar:lib/protorabbit-1.0.5.jar"
           source="1.5"
           debug="on">
       </javac>
