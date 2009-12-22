@@ -89,7 +89,7 @@ public class WidgetCommand extends BaseCommand {
            e.printStackTrace();
        }
        String tid = ctx.getTemplateId();
-       ITemplate template = ctx.getConfig().getTemplate(tid);
+       ITemplate template = ctx.getConfig().getTemplate( tid, ctx );
        // turn off built in profiling end in protorabbit so we can track jmaki resource loading
        ctx.setAttribute(Config.DEFAULT_EPISODE_PROCESS, null);
        if (template != null) {
